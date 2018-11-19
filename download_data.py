@@ -2,13 +2,13 @@ import boto3
 import botocore
 import json
 import pandas as pd
-import pprint
+#import pprint
 
-def get_images(start, stop):
+def get_images(start, stop, interval):
 
 	missing_img = []
 
-	for i in range(start,stop, 100):
+	for i in range(start,stop, interval):
 		try:
 		    s3.Bucket(BUCKET_NAME).download_file('bin-images/'+str(i)+'.jpg', 'images/'+str(i)+'.jpg')
 		except botocore.exceptions.ClientError as e:
@@ -19,15 +19,14 @@ def get_images(start, stop):
 	print("Total Missing: ", len(missing_img))
 	return missing_img		
 
-def get_metadata(start, stop):
+def get_metadata(start, stop, interval):
 
 	missing_meta = []
 
-	for i in range(start,stop, 100):
+	for i in range(start,stop, interval):
 		try:
 		    s3.Bucket(BUCKET_NAME).download_file('metadata/'+str(i)+'.json', 'metadata/'+str(i)+'.json')
 		except botocore.exceptions.ClientError as e:
-		    # print(str(i)+'.json' + ' does not exist.')
 		    missing_meta.append(str(i)+'.json')
 
 	print("Missing Files: ", missing_meta)
@@ -35,12 +34,12 @@ def get_metadata(start, stop):
 	return missing_meta		
 
 
-def get_labels(start, stop):
+def get_labels(start, stop, interval):
 
 	data_list = []
 	labels = ['file', 'quantity']
 
-	for i in range(start, stop, 100):
+	for i in range(start, stop, interval):
 		try:
 			with open('metadata/'+str(i)+'.json') as data_file:    
 			    data = json.load(data_file)
@@ -59,15 +58,16 @@ if __name__ == "__main__":
 	BUCKET_NAME = 'aft-vbi-pds'
 	start = 500
 	stop = 50000
+	interval = 100
 
-	# # get images
-	#get_images(start, stop)
+	# get images
+	get_images(start, stop, interval)
 
-	# # get metadata
-	#get_metadata(start, stop)
+	# get metadata
+	get_metadata(start, stop, interval)
 
 	# get labels
-	get_labels(start, stop)
+	get_labels(start, stop, interval)
 
 
 
