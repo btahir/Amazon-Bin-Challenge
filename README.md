@@ -1,4 +1,4 @@
-# Amazon-Bin-Challenge
+# Amazon Bin Challenge
 Count Number Of Bins In Amazon Pods Using Deep Learning
 
 This project is based on the Amazon Bin Datasets Challenge: https://registry.opendata.aws/amazon-bin-imagery/
